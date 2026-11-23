@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { type Trip } from '@/App.vue'
+import { useWeatherService } from '@/service/useWeatherService'
+import { useQuery } from '@tanstack/vue-query'
 import { computed, ref, type Ref } from 'vue'
 
 const formModel: Ref<Trip> = ref({} as Trip)
@@ -27,6 +29,15 @@ const submitHandler = ($event: SubmitEvent) => {
 
   console.log('form submitted', $event, formModel.value)
 }
+
+const weatherService = useWeatherService();
+const enabled = computed(() => !!formModel.value.name);
+const { isFetching, data: geolocationInfo } = useQuery({
+  queryKey: ['geolocation', formModel.value.name],
+  queryFn: () => weatherService.getGeoLocationFromName(formModel.value.name ?? ''),
+  enabled,
+  staleTime: 2 * 60 * 1000,
+});
 </script>
 
 <template>
@@ -53,6 +64,7 @@ const submitHandler = ($event: SubmitEvent) => {
 
   <p>Trip "{{ formModel.name }}" will be created.</p>
   <p>Trip is {{ tripLengthString }}</p>
+  <p>Geocoordinates <span v-if="isFetching">Loading...</span><span v-else>{{ geolocationInfo }}</span></p>
 </template>
 
 <styles scoped></styles>

@@ -5,7 +5,7 @@ import { createRouter, createWebHashHistory, type RouteRecordRaw } from "vue-rou
 
 const routes: RouteRecordRaw[] = [
     { name: 'home', path: '/', component: TripOverview },
-    { name: 'detail', path: '/trip/:id', component: TripDetail },
+    { name: 'detail', path: '/trip/:id', component: () => TripDetail },
     { name: 'form', path: '/trip-form', component: TripForm }
 ]
 
