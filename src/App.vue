@@ -6,6 +6,7 @@ export interface Trip {
   name: string
   description: string
   date: string
+  length: number
 }
 </script>
 
