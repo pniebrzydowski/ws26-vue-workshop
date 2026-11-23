@@ -1,24 +1,28 @@
 <script setup lang="ts">
 import { type Trip } from '@/App.vue'
-import { useLengthTransform } from '@/logic/useLengthTransform';
-import { ref, type Ref } from 'vue'
-
-const { getTripLengthString } = useLengthTransform();
+import { computed, ref, type Ref } from 'vue'
 
 const formModel: Ref<Trip> = ref({} as Trip)
-const errors = ref<Partial<Record<keyof Trip, string>>>({});
+const errors = ref<Partial<Record<keyof Trip, string>>>({})
+const tripLengthString = computed((): '-' | 'short' | 'medium' | 'long' => {
+  if (!formModel.value?.length) return '-'
+  const len = formModel.value.length
+  if (len < 3) return 'short'
+  if (len < 14) return 'medium'
+  return 'long'
+})
 
 const validateForm = (): boolean => {
-    errors.value = {};
-    if (!formModel.value.name) {
-        errors.value.name = 'Name is required';
-    }
-    return !errors.value.name;
+  errors.value = {}
+  if (!formModel.value.name) {
+    errors.value.name = 'Name is required'
+  }
+  return !errors.value.name
 }
 const submitHandler = ($event: SubmitEvent) => {
-  if( !validateForm()) {
-    alert('form is invalid');
- return;
+  if (!validateForm()) {
+    alert('form is invalid')
+    return
   }
 
   console.log('form submitted', $event, formModel.value)
@@ -48,7 +52,7 @@ const submitHandler = ($event: SubmitEvent) => {
   </form>
 
   <p>Trip "{{ formModel.name }}" will be created.</p>
-  <p>Trip is {{ getTripLengthString(formModel.length) }}</p>
+  <p>Trip is {{ tripLengthString }}</p>
 </template>
 
 <styles scoped></styles>

@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import type { Trip } from '@/App.vue';
+import { useTripsStore } from '@/state/useTripsStore.ts';
 import TripListItem from './TripListItem.vue';
-
-const props = defineProps<{
-    trips: Trip[]
-}>();
+const tripsStore = useTripsStore();
+const { tripsInFuture } = tripsStore;
 
 const vHighlight = {
   mounted: (el: HTMLElement) => {
@@ -20,7 +18,7 @@ const onTripDeleted = (id: number) => {
 <template>
   <h2 v-highlight>You have so many trips!</h2>
   <ul>
-    <TripListItem v-for="trip in props.trips" :key="trip.id" :trip="trip" @trip-deleted="onTripDeleted" />
+    <TripListItem v-for="trip in tripsInFuture" :key="trip.id" :trip="trip" @trip-deleted="onTripDeleted" />
   </ul>
 </template>
 
