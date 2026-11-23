@@ -20,7 +20,7 @@ const onDelete = () => {
 </script>
 
 <template>
-  <li>
+  <li class="is-highlight">
     <RouterLink :to="`/trip/${props.trip.id}`">Go to Details</RouterLink>
     {{ props.trip.name }} | {{ props.trip.description }} | {{ props.trip.date }} | 
     {{ tripLengthTransform.getTripLengthString(trip.length) }}
